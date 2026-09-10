@@ -10,19 +10,15 @@ export type ProductImage = {
   isPrimary: boolean
 }
 
-
 export type Product = {
   id: string
   name: string
   slug: string
-  description: string
+  description?: string
   categoryId?: string
-
   price: number
   stockQuantity: number
   stockStatus: 'in-stock' | 'out-of-stock'
-
   images: ProductImage[]
   attributes: ProductAttribute[]
 }
-

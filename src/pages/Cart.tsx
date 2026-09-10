@@ -136,10 +136,18 @@ function Cart() {
         )}
 
         {cart && cart.cartCount !== 0 && (
-          <div className="text-end mt-4">
+          <div className="mt-4 text-end">
             <h2 className="h4">
               Subtotal: ₦{cart.cartSubtotal.toLocaleString()}
             </h2>
+
+            <Link
+              to="/checkout"
+              className="btn btn-primary mt-3"
+            >
+              Proceed to Checkout
+              <i className="bi bi-arrow-right ms-2"></i>
+            </Link>
           </div>
         )}
       </div>
