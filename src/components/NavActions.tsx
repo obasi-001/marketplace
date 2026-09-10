@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { CartContext } from '../context/CartContext'
+import { AuthContext } from '../context/AuthContext'
 
 function NavActions() {
     const cart = useContext(CartContext)
+    const auth = useContext(AuthContext)
     return (
         <>
             <Link to="/wishlist" className="nav-link">
@@ -14,7 +16,10 @@ function NavActions() {
                 <i className="bi bi-cart"></i> Cart ({cart?.cartCount ?? 0})
             </Link>
 
-            <Link to="/login" className="nav-link">
+            <Link
+                to={auth?.user ? '/account' : '/login'}
+                className="nav-link"
+            >
                 <i className="bi bi-person"></i> Account
             </Link>
         </>

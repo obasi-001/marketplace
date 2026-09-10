@@ -1,10 +1,60 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { CartContext } from '../context/CartContext'
 
 
 
 function Checkout() {
     const cart = useContext(CartContext)
+    const [fullName, setFullName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+    const [address, setAddress] = useState('')
+    const [city, setCity] = useState('')
+    const [state, setState] = useState('')
+    const [orderNote, setOrderNote] = useState('')
+
+    const handleContinue = () => {
+  if (!fullName.trim()) {
+    alert('Please enter your full name.')
+    return
+  }
+
+  if (!email.trim()) {
+    alert('Please enter your email address.')
+    return
+  }
+
+  if (!phone.trim()) {
+    alert('Please enter your phone number.')
+    return
+  }
+
+  if (!address.trim()) {
+    alert('Please enter your delivery address.')
+    return
+  }
+
+  if (!city.trim()) {
+    alert('Please enter your city.')
+    return
+  }
+
+  if (!state.trim()) {
+    alert('Please enter your state.')
+    return
+  }
+
+  console.log({
+    fullName: fullName.trim(),
+    email: email.trim(),
+    phone: phone.trim(),
+    address: address.trim(),
+    city: city.trim(),
+    state: state.trim(),
+    orderNote: orderNote.trim(),
+  })
+}
+
     return (
         <section className="py-5">
             <div className="container">
@@ -28,6 +78,8 @@ function Checkout() {
                                         id="fullName"
                                         className="form-control"
                                         placeholder="Enter your full name"
+                                        value={fullName}
+                                        onChange={(event) => setFullName(event.target.value)}
                                     />
                                 </div>
 
@@ -41,6 +93,8 @@ function Checkout() {
                                         id="email"
                                         className="form-control"
                                         placeholder="Enter your email address"
+                                        value={email}
+                                        onChange={(event) => setEmail(event.target.value)}
                                     />
                                 </div>
 
@@ -56,6 +110,8 @@ function Checkout() {
                                         placeholder="08012345678"
                                         inputMode="numeric"
                                         pattern="[0-9]*"
+                                        value={phone}
+                                        onChange={(event) => setPhone(event.target.value)}
                                     />
                                 </div>
 
@@ -69,6 +125,8 @@ function Checkout() {
                                         className="form-control"
                                         rows={3}
                                         placeholder="Enter your delivery address"
+                                        value={address}
+                                        onChange={(event) => setAddress(event.target.value)}
                                     ></textarea>
                                 </div>
 
@@ -82,6 +140,8 @@ function Checkout() {
                                         id="city"
                                         className="form-control"
                                         placeholder="Enter your city"
+                                        value={city}
+                                        onChange={(event) => setCity(event.target.value)}
                                     />
                                 </div>
                                 <div className="mb-3">
@@ -94,6 +154,8 @@ function Checkout() {
                                         id="state"
                                         className="form-control"
                                         placeholder="Enter your state"
+                                        value={state}
+                                        onChange={(event) => setState(event.target.value)}
                                     />
                                 </div>
                                 <div className="mb-3">
@@ -106,8 +168,17 @@ function Checkout() {
                                         className="form-control"
                                         rows={3}
                                         placeholder="Example: Please call me before delivery, deliver after 4 PM, etc."
+                                        value={orderNote}
+                                        onChange={(event) => setOrderNote(event.target.value)}
                                     ></textarea>
                                 </div>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={handleContinue}
+                                >
+                                    Continue
+                                </button>
 
 
 
