@@ -1,14 +1,44 @@
 import { signInWithGoogle, registerWithEmail } from '../services/auth'
 import { useState } from 'react'
+import { getAuthErrorMessage } from '../utils/authErrors'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+
+
 
 function Register() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const location = useLocation()
+    const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        await registerWithEmail(email, password)
+        setError('')
+
+        try {
+            await registerWithEmail(email, password)
+            const from = location.state?.from || '/'
+            navigate(from)
+        } catch (error) {
+            console.error(error)
+            setError(getAuthErrorMessage(error))
+        }
+    }
+
+    const handleGoogleRegister = async () => {
+        setError('')
+
+        try {
+            await signInWithGoogle()
+
+            const from = location.state?.from || '/'
+            navigate(from)
+        } catch (error) {
+            console.error(error)
+            setError(getAuthErrorMessage(error))
+        }
     }
 
     return (
@@ -19,7 +49,7 @@ function Register() {
                 <button
                     type="button"
                     className="btn btn-light border w-100 d-flex align-items-center justify-content-center gap-2"
-                    onClick={signInWithGoogle}
+                    onClick={handleGoogleRegister}
                 >
                     <img
                         src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -33,6 +63,12 @@ function Register() {
                 <div className="text-center my-3">
                     <span className="text-body-secondary">OR</span>
                 </div>
+
+                {error && (
+                    <div className="alert alert-danger" role="alert">
+                        {error}
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
@@ -73,6 +109,12 @@ function Register() {
                         Create Account
                     </button>
                 </form>
+                <p className="text-center mt-4 mb-0">
+                    Already have an account?{' '}
+                    <Link to="/login">
+                        Login
+                    </Link>
+                </p>
             </div>
         </section>
     )

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useContext } from 'react'
 import { CartContext } from '../context/CartContext'
 import { AuthContext } from '../context/AuthContext'
@@ -6,6 +6,9 @@ import { AuthContext } from '../context/AuthContext'
 function NavActions() {
     const cart = useContext(CartContext)
     const auth = useContext(AuthContext)
+    const location = useLocation()
+
+
     return (
         <>
             <Link to="/wishlist" className="nav-link">
@@ -17,7 +20,16 @@ function NavActions() {
             </Link>
 
             <Link
-                to={auth?.user ? '/account' : '/login'}
+                to={
+                    auth?.user
+                        ? '/account'
+                        : '/login'
+                }
+                state={
+                    auth?.user
+                        ? undefined
+                        : { from: location.pathname }
+                }
                 className="nav-link"
             >
                 <i className="bi bi-person"></i> Account

@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   signOut,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
 } from 'firebase/auth'
 
 export const auth = getAuth(app)
@@ -25,6 +26,17 @@ export const registerWithEmail = (
   password: string,
 ) => {
   return createUserWithEmailAndPassword(
+    auth,
+    email,
+    password,
+  )
+}
+
+export const loginWithEmail = (
+  email: string,
+  password: string,
+) => {
+  return signInWithEmailAndPassword(
     auth,
     email,
     password,

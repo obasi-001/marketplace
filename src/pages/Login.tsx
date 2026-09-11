@@ -1,7 +1,49 @@
-import { Link } from 'react-router-dom'
-import { signInWithGoogle } from '../services/auth'
+import { useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {
+  signInWithGoogle,
+  loginWithEmail,
+} from '../services/auth'
+import { getAuthErrorMessage } from '../utils/authErrors'
 
 function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const from = location.state?.from || '/'
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    setError('')
+
+    try {
+      await loginWithEmail(email, password)
+
+      navigate(from)
+    } catch (error) {
+      console.error(error)
+      setError(getAuthErrorMessage(error))
+    }
+  }
+
+  const handleGoogleLogin = async () => {
+    setError('')
+
+    try {
+      await signInWithGoogle()
+
+      navigate(from)
+    } catch (error) {
+      console.error(error)
+      setError(getAuthErrorMessage(error))
+    }
+  }
+
   return (
     <section className="py-5">
       <div className="container">
@@ -16,7 +58,7 @@ function Login() {
                 <button
                   type="button"
                   className="btn btn-light border w-100 d-flex align-items-center justify-content-center gap-2"
-                  onClick={signInWithGoogle}
+                  onClick={handleGoogleLogin}
                 >
                   <img
                     src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -24,6 +66,7 @@ function Login() {
                     width="20"
                     height="20"
                   />
+
                   <span>Continue with Google</span>
                 </button>
 
@@ -33,7 +76,16 @@ function Login() {
                   </span>
                 </div>
 
-                <form>
+                {error && (
+                  <div
+                    className="alert alert-danger"
+                    role="alert"
+                  >
+                    {error}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <label
                       htmlFor="email"
@@ -47,6 +99,10 @@ function Login() {
                       id="email"
                       className="form-control"
                       placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) =>
+                        setEmail(e.target.value)
+                      }
                     />
                   </div>
 
@@ -63,6 +119,10 @@ function Login() {
                       id="password"
                       className="form-control"
                       placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) =>
+                        setPassword(e.target.value)
+                      }
                     />
                   </div>
 
@@ -76,7 +136,10 @@ function Login() {
 
                 <p className="text-center mt-4 mb-0">
                   Don't have an account?{' '}
-                  <Link to="/register">
+                  <Link
+                    to="/register"
+                    state={{ from }}
+                  >
                     Register
                   </Link>
                 </p>
